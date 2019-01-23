@@ -1,0 +1,60 @@
+html{
+	text-align:center;
+    display: flex;
+}
+	.Head{
+		text-align:center;
+		color:#F42A07;
+		margin: 40px;
+		padding: 0px;
+		font-family:Script MT ;
+		font-size:30px;
+	}
+	footer ul li{
+	  display:inline;
+	      list-style-type: none;
+        margin: auto;
+        overflow: hidden;
+        color:red;
+        padding:10px;
+        width:auto;
+	}
+	nav{
+	  margin-bottom:10px;
+	}
+	nav ul{ 
+        list-style-type: none;
+        margin: auto;
+        overflow: hidden;
+        background-color: #ef853b;
+      }
+      
+      
+    nav ul li{
+		display: table-cell;
+    float:left;
+		padding-bottom: 0;
+		padding-right:5%;
+		margin-left:60px;
+      }
+      
+     nav ul li a{
+        display: table-cell;
+        color: white;
+        text-align: center;
+        padding: 16px;
+        text-decoration: none;
+        font-family:Arial Rounded MT ;
+      } 
+	li a:hover{
+		background-color: #803300;
+	}
+	li a:link{
+	    color:white;
+	}
+	li a:visited{
+		color:white;
+	}
+	li a:active {
+    color: darkred;
+}
