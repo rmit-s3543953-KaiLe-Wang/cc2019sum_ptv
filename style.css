@@ -1,10 +1,10 @@
+
 html{
 	text-align:center;
     display: flex;
 }
 	.Head{
 		text-align:center;
-		color:#F42A07;
 		margin: 40px;
 		padding: 0px;
 		font-family:Script MT ;
@@ -57,4 +57,211 @@ html{
 	}
 	li a:active {
     color: darkred;
+}
+	body {
+margin:auto;
+width:100%;
+}
+
+	.w3-black,.w3-hover-black:hover{color:#fff!important;background-color:#000!important}
+	
+	.w3-button {
+    border: none;
+    margin:5px;
+    display: inline-block;
+    outline: 0;
+    padding: 6px 10px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: darkgreen;
+    background-color: orange;
+    text-align: center;
+	color=white;
+    cursor: pointer;
+    white-space: pre-wrap;
+}
+.submitButton{
+  border: none;
+    margin:5px;
+    display: inline-block;
+    outline: 0;
+    padding: 6px 10px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    background-color: red;
+    text-align: center;
+    cursor: pointer;
+    white-space: pre-wrap;
+}
+	.w3-display-left {
+	margin-left:10%;
+	padding-left:10px;}
+	.w3-display-right {
+	margin-right:10%;
+	padding-right:10px;
+    -ms-transform: translate(0%,-50%);
+}
+	.Slide-box{
+		text-align: center;
+		margin:auto;
+    	padding: 10px;
+	}
+	.mySlides {
+	max-width:1200px;
+	max-height:600px;
+	width:100%;
+  margin:auto;
+    text-align: center;
+    display: block;
+    }
+	.w3-badge {height:10px;width:10px;padding:10px;margin:5px}
+	 main{
+        padding:10px;
+      }
+  footer {
+        background-color:none;
+        padding: 20px;
+        margin:auto;
+        color:white;
+        font-size:small;
+      }
+	.container{
+		position: inherit;
+		text-align: center;width:96%; display:block;margin:auto;padding:20px;} 
+	.box{position: relative; box-sizing:border-box;width:80%;border:0px;padding:0px;display:inline}
+	.box:hover .overlay {
+	bottom: 0%;
+  	height: 100%;
+	}
+	.overlay {
+  		position: absolute;
+  		bottom: 100%;
+  		left: 0;
+  		right: 0;
+  		background-color: #ffffe6;
+  		overflow: hidden;
+  		width: 200px;
+  		height:0;
+  		transition: .5s ease;}
+
+	.text {
+  	white-space: nowrap; 
+  	color: black;
+  	padding:5px;
+  	position: absolute;
+  	overflow: hidden;
+  	top: 50%;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+  	-ms-transform: translate(-50%, -50%);
+}
+	.platform_box{
+		display:inline-block;
+		padding: 10px;
+		margin:10px;
+		height: 350px;
+		width: 250px;
+		background-color:white;
+	}
+	.w3-red,.w3-hover-red:hover{
+	  color:#fff!important;
+	  background-color:#f44336!important}
+	  .w3-white,.w3-hover-white:hover{
+	    color:#000!important;
+	    background-color:#fff!important}
+  .main_box{
+    background-color:#ffe699;
+    margin-top:5px;
+    margin:auto;
+    box-shadow: 10px 10px 5px #888888;
+    padding:10px;
+    width:90%;
+  }
+  .form_box{
+    background-color: #fff7e6;
+    max-width:800px;
+    min-width:400px;
+    text-align:left;
+    margin:auto;
+    padding:10px;
+    box-shadow: 10px 10px 5px #888888;
+    border-radius: 30px 40px 30px;
+    display:inline-block;
+  }
+ 
+ .cus_table{
+   border:2px solid #ffe699;
+ }
+  .cus_th{
+    border:2px solid #ffe699;
+    width:45%;
+    text-align:right;
+  }
+  
+  .cus_td{
+    border:2px solid #ffe699;
+    width:55%;
+    
+  }
+  
+  .text_box{
+    max-width:800px;
+    min-width:400px;
+    margin:auto;
+    margin-bottom:40px;
+    padding:10px;
+    box-shadow: 10px 10px 5px #888888;
+    border-radius: 30px 40px 30px;
+    display:block;
+    background-color: #fff7e6;
+  }
+  div .submit{
+    float:right;
+  }
+  table{
+    margin:auto;
+    padding:10px;
+    width:100%;
+  }
+th,td{
+  width:auto;
+  border : 1px solid black;
+  border-spacing: 0px;
+  padding:5px;
+  margin:1px;
+}
+
+table,th,td{
+  border-collapse:collapse;
+}
+h3{
+  font-family:"Lucida Console";
+  text-align:center;
+  color:#882b2b;
+  margin-top: 5px;
+}
+h5{
+  font-family:"Lucida Console";
+  text-align:center;
+  color:#882b2b;
+  margin-top: 5px;
+}
+ h2{
+	  font-family:Baskerville Old Face;
+	  /*font-family:Aharoni;*/
+	  color:#F97002;
+	  font-size:40px;
+	  text-align:left;
+	  margin:auto;
+	  padding-left:30px;
+	}
+
+a:link{
+  color:black;
+}
+a:visited{
+  color:white;
 }
