@@ -125,46 +125,35 @@ width:100%;
         background-color:none;
         padding: 20px;
         margin:auto;
-        color:white;
+        color:black;
         font-size:small;
       }
-	.container{
-		position: inherit;
-		text-align: center;width:96%; display:block;margin:auto;padding:20px;} 
-	.box{position: relative; box-sizing:border-box;width:80%;border:0px;padding:0px;display:inline}
-	.box:hover .overlay {
-	bottom: 0%;
-  	height: 100%;
-	}
-	.overlay {
-  		position: absolute;
-  		bottom: 100%;
-  		left: 0;
-  		right: 0;
-  		background-color: #ffffe6;
-  		overflow: hidden;
-  		width: 200px;
-  		height:0;
-  		transition: .5s ease;}
 
-	.text {
-  	white-space: nowrap; 
-  	color: black;
-  	padding:5px;
-  	position: absolute;
-  	overflow: hidden;
-  	top: 50%;
-  	left: 50%;
-  	transform: translate(-50%, -50%);
-  	-ms-transform: translate(-50%, -50%);
-}
 	.platform_box{
-		display:inline-block;
-		padding: 10px;
+		display:inline-table;
+		padding: 2px;
 		margin:10px;
 		height: 350px;
 		width: 250px;
 		background-color:white;
+	}
+	.platform_box .destination{
+		display:inline;
+		text-align: right;
+	}
+	.platform_box .platform_number{
+		display:inline;
+		padding:10px;
+		margin-right:20px;
+		border-style: solid;
+		text-align: left;
+	}
+	.platform_box .stop_list{
+		display:inline-block;
+		column-count:3;
+		padding:3px;
+		margin:auto;
+		text-align: left;
 	}
 	.w3-red,.w3-hover-red:hover{
 	  color:#fff!important;
@@ -251,9 +240,7 @@ h5{
 }
  h2{
 	  font-family:Baskerville Old Face;
-	  /*font-family:Aharoni;*/
-	  color:#F97002;
-	  font-size:40px;
+	  font-size:30px;
 	  text-align:left;
 	  margin:auto;
 	  padding-left:30px;
