@@ -1,13 +1,13 @@
 <?php
-include('../a2/head.inc');
-include('../a2/nav.inc');
+include('head.inc');
+include('nav.inc');
 ?>
 <body>
     <title>Train tracker</title>
     <main>
       <div class="main_box">
 	  <div class="search-container">
-	<form action="/index.php">
+	<form action="index.php">
       <input type="text" placeholder="Search.." name="search">
       <button type="submit" ><img src= "search.png"></button>
     </form>
@@ -25,7 +25,7 @@ include('../a2/nav.inc');
     </div>
     </main>
 <?php
-include('../a2/footer.inc');
+include('footer.inc');
 ?>
   </body>  
 
