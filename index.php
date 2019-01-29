@@ -1,6 +1,6 @@
 <?php
-include('head.inc');
 include('nav.inc');
+include('head.inc');
 ?>
 <body>
     <title>Train tracker</title>
@@ -16,7 +16,7 @@ include('nav.inc');
 	//departure time for each route.
 	$departure_time = array ("16:32","5:02","7:32");
 	//the details for each route.
-	$stop_list[$destination_list[0]]=array("Flinder street","Southern cross","flagstaff","parliament","--------","--------","Clifton hill","------","collingwood");
+	$stop_list[$destination_list[0]]=array("Flinder street","Southern cross","flagstaff","parliament","--------","--------","Clifton hill","------","collingwood","north richmond", "west richmond", "westgath","--------","--------","Clifton hill","------","collingwood","north richmond", "west richmond", "westgath");
 	$stop_list[$destination_list[1]]=array("Flinder street","Southern cross","flagstaff","parliament");
 	$stop_list[$destination_list[2]]=array("Flinder street","-------","flagstaff","parliament");
 	//platform number.
