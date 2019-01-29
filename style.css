@@ -106,9 +106,6 @@ width:100%;
         color:black;
         font-size:small;
       }
-.search-container{
-  padding:5px;
-}
 	.platform_box{
 		display:inline-table;
 		padding: 7px;
@@ -189,22 +186,7 @@ width:100%;
   div .submit{
     float:right;
   }
-  table{
-    margin:auto;
-    padding:10px;
-    width:100%;
-  }
-th,td{
-  width:auto;
-  border : 1px solid black;
-  border-spacing: 0px;
-  padding:5px;
-  margin:1px;
-}
 
-table,th,td{
-  border-collapse:collapse;
-}
 h3{
   font-family:"Lucida Console";
   text-align:center;
