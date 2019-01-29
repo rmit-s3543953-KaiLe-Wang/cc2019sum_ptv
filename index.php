@@ -1,6 +1,6 @@
 <?php
-include('../a2/head.inc');
-include('../a2/nav.inc');
+include('head.inc');
+include('nav.inc');
 ?>
 <body>
     <title>Train tracker</title>
@@ -25,7 +25,7 @@ include('../a2/nav.inc');
     </div>
     </main>
 <?php
-include('../a2/footer.inc');
+include('footer.inc');
 ?>
   </body>  
 
