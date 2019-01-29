@@ -1,10 +1,36 @@
 <?php
 $UserID = '3001008';
 $key = 'e3251427-f68b-4535-a093-1d380e17e5dc';
+
 $SearchUrl = "/v3/search/Richmond?route_types=0";
+$signedUrl = generateURL($SearchUrl, $UserID, $key);
+$content = file_get_contents($signedUrl);
+$obj = json_decode($content, true);
+$stops = $obj['stops'];
+
+//echo $Num;
+//print_r($obj);
+$index =0;
+foreach ($obj['stops'] as $stops)
+{
+
+    if(strcasecmp("Richmond station",$stops['stop_name'])==0)
+    {
+    	echo "Stop Name:". $stops['stop_name'] ."\n";
+    	echo '<br/>';
+    	echo "Stop_ID:". $stops['stop_id'] ."\n";
+    	echo '<br/>';
+    	break;
+    }
+   $index++;
+};
+
+
 $DirectionUrl = "/v3/directions/route/8";
-$signedUrl = generateURL($DirectionUrl, $UserID, $key);
-drawResponse($signedUrl);
+$DepartureUrl = "http://timetableapi.ptv.vic.gov.au/v3/departures/route_type/0/stop/1145/route/8?direction_id=7&look_backwards=false&max_results=10&include_cancelled=false";
+$Pattern = "http://timetableapi.ptv.vic.gov.au/v3/pattern/run/949921/route_type/0?expand=route";
+
+
 
 function generateURL($Url, $UserID, $key)
 {
@@ -19,25 +45,21 @@ function generateURL($Url, $UserID, $key)
 	}
 	$Url .= "devid=" . $UserID;
  
-	// hash the endpoint URL
 	$signature = strtoupper(hash_hmac("sha1", $Url, $key, false));
- 
-	// add API endpoint, base URL and signature together
 	return "http://timetableapi.ptv.vic.gov.au" . $Url . "&signature=" . $signature;
 }
 
 function drawResponse($signedUrl)
 {
-    echo "<p>$signedUrl</p>";
-    echo "<textarea rows=\"10\" cols=\"60\">";
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $signedUrl); 
-    curl_setopt($ch, CURLOPT_TIMEOUT, '3'); 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    echo $xmlstr = curl_exec($ch); 
-    curl_close($ch);
-    
-    echo "</textarea>";
+   $content = file_get_contents($signedUrl);
+   $obj = json_decode($content, true);
+   foreach ($obj['directions'] as $directions)
+{
+    echo "Direction_ID:". $directions['direction_id'] ."\n";
+    echo '<br/>';
+    echo "Direction_Name:". $directions['direction_name'] ."\n";
+    echo '<br/>';
+};
 }
 
 ?>
