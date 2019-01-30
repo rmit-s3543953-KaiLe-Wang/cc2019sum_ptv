@@ -9,7 +9,8 @@ $key = 'e3251427-f68b-4535-a093-1d380e17e5dc';
 /*
 	get stop name & ID through search url
  */
-$SearchUrl = "/v3/search/Richmond?route_types=0";
+$SearchUrl = "/v3/search/Richmond?route_types=0&include_addresses=false&include_outlets=false&match_stop_by_suburb=true&match_route_by_suburb=false&match_stop_by_gtfs_stop_id=false";
+
 $search = generateURL($SearchUrl, $UserID, $key);
 $content = file_get_contents($search);
 $obj = json_decode($content, true);
@@ -33,7 +34,7 @@ foreach ($obj['stops'] as $stops)
 /*
 	get route ID of first 10 results from departure
  */
-$DepartureUrl = "/v3/departures/route_type/0/stop/$stopID?max_results=1";
+$DepartureUrl = "/v3/departures/route_type/0/stop/$stopID?look_backwards=false&max_results=1";
 $departure = generateURL($DepartureUrl, $UserID, $key);
 $content1 = file_get_contents($departure);
 $obj1 = json_decode($content1, true);
@@ -69,27 +70,54 @@ foreach ($arrayTemp as $Temp) {
     	]);
 	};
 } 
+//print_r($arrayRnD);
+
+
+/*
+	get run ID of first 2 results of each pairs from departure
+ */
+$arrayRunID = [];
+foreach ($arrayRnD as $RD) {
+	$DepartureUrl2 = "/v3/departures/route_type/0/stop/". $stopID ."/route/". $RD['Route_ID'] ."?direction_id=". $RD['Direction_ID'] ."&look_backwards=false&max_results=2&include_cancelled=false";
+	$departure2 = generateURL($DepartureUrl2, $UserID, $key);
+	//echo $departure2;
+	//echo "<br/>";
+	$content4 = file_get_contents($departure2);
+	$obj4 = json_decode($content4, true);
+	$departures = $obj4['departures'];
+
+	foreach ($obj4['departures'] as $departures) {
+		array_push($arrayRunID, $departures['run_id']);
+	}
+}
+
+//print_r($arrayRunID);
+
 
 
 /*
 	Get Final stop names
  */
 $res = array();
-foreach ($arrayRnD as $RnD) {
-	$StopURL = "/v3/stops/route/". $RnD['Route_ID'] ."/route_type/0?direction_id=". $RnD['Direction_ID'];
-	$finalstop = generateURL($StopURL, $UserID, $key);
-	$content3 = file_get_contents($finalstop);
+//$platform = array();
+foreach ($arrayRunID as $Run) {
+	$PatternURL = "/v3/pattern/run/". $Run ."/route_type/0?expand=stop&stop_id=". $stopID;
+	$pattern = generateURL($PatternURL, $UserID, $key);
+	$content3 = file_get_contents($pattern);
 	$obj3 = json_decode($content3, true);
 
-	$finals = $obj3['stops'];
+	$finalstop = $obj3['stops'];
 	$stopArray = array();
-	foreach ($obj3['stops'] as $finals) {
-			$stopArray[] = $finals['stop_name'] ;
+	foreach ($obj3['stops'] as $finalstop) {
+			$stopArray[] = $finalstop['stop_name'] ;
 		}
-		$res[] = $stopArray;
+	$res[] = $stopArray;
 }
+echo"<pre>";
+print_r($res);
+echo "<pre>";
 
-print_r($res[0]);
+
 
 /*
 	Function to form an requirest URL
