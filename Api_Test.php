@@ -1,15 +1,16 @@
 <?php
+$input=$_GET["search"];
+
 /*
 	developerID and Key for API
  */
 $UserID = '3001008';
 $key = 'e3251427-f68b-4535-a093-1d380e17e5dc';
 
-
 /*
 	get stop name & ID through search url
  */
-$SearchUrl = "/v3/search/Richmond?route_types=0&include_addresses=false&include_outlets=false&match_stop_by_suburb=true&match_route_by_suburb=false&match_stop_by_gtfs_stop_id=false";
+$SearchUrl = "/v3/search/$input?route_types=0&include_addresses=false&include_outlets=false&match_stop_by_suburb=true&match_route_by_suburb=false&match_stop_by_gtfs_stop_id=false";
 
 $search = generateURL($SearchUrl, $UserID, $key);
 $content = file_get_contents($search);
@@ -21,7 +22,7 @@ $stopName = '';
 $stopID = '';
 foreach ($obj['stops'] as $stops)
 {
-    if(strcasecmp("Richmond station",$stops['stop_name'])==0)
+    if(strcasecmp("$input station",$stops['stop_name'])==0)
     {
         $stopName .= $stops['stop_name'];
         $stopID .= $stops['stop_id'];
@@ -33,7 +34,6 @@ foreach ($obj['stops'] as $stops)
         break;
     }
 };
-
 
 
 /*
@@ -118,6 +118,10 @@ foreach ($arrayRnD as $RD) {
 	Get Final stop names
  */
 $res = [];
+$destination_list =[];
+$stop_list = [];
+$departure_platform = [];
+$departure_time = [];
 //$platform = array();
 foreach ($arrayRunID as $Run) {
     $PatternURL = "/v3/pattern/run/". $Run['RunId'] ."/route_type/0?expand=stop&stop_id=". $stopID;
@@ -131,21 +135,43 @@ foreach ($arrayRunID as $Run) {
     foreach ($obj3['stops'] as $finalstop) {
         $stopArray[] = $finalstop['stop_name'] ;
     }
-    array_push($res, [
-        'RouteID'=>$Run['RouteID'],'DirectionID'=>$Run['DirectionID'],
+    array_push(
+        $res, [
+        'RouteID'=>$Run['RouteID'],
+        'DirectionID'=>$Run['DirectionID'],
         'Direction_Name'=>$Run['Direction_Name'],
-        'RunId'=>$Run['RunId'],'PlateForm'=>$Run['PlateForm'],
-        'EstTime'=>$Run['EstTime'],'stops'=>$stopArray,]);
+        'RunId'=>$Run['RunId'],
+        'PlateForm'=>$Run['PlateForm'],
+        'EstTime'=>$Run['EstTime'],
+        'stops'=>$stopArray,]);
+
+    array_push($destination_list,$Run['Direction_Name']);
+    array_push($stop_list,$stopArray);
+    array_push($departure_platform,$Run['PlateForm']);
+    array_push($departure_time,$Run['EstTime']);
+
 }
 
-//combine necessary array data
+//delete same runId result
 
-echo "res array";
+//sort Array format
+//1st sort by plateform and get new array
+usort($res,"cmp_plate_asc");
+function cmp_plate_asc($a, $b){
+    if ($a['PlateForm'] == $b['PlateForm']){
+        return 0;
+    }
+    return ($a['PlateForm'] > $b['PlateForm'])? 1 : -1;
+}
 
-echo"<pre>";
-print_r($res);
-echo "<pre>";
 
+//echo "res array";
+//echo"<pre>";
+//print_r($res);
+//print_r($destination_list);
+//print_r($stop_list);
+//print_r($departure_platform);
+//echo "<pre>";
 
 
 /*
