@@ -8,7 +8,7 @@ html{
 		margin: 40px;
 		padding: 0px;
 		font-family:Script MT ;
-		font-size:30px;
+		font-size:40px;
 	}
 	footer ul li{
 	  display:inline;
@@ -22,11 +22,11 @@ html{
 	nav{
 	  margin-bottom:10px;
 	}
-	nav ul{ 
+	nav ul{
         list-style-type: none;
         margin: auto;
         overflow: hidden;
-        background-color: #ef853b;
+        background-color: #c1baa9;
       }
       
       
@@ -42,21 +42,21 @@ html{
         display: table-cell;
         color: white;
         text-align: center;
-        padding: 16px;
+        padding: 25px;
         text-decoration: none;
         font-family:Arial Rounded MT ;
       } 
 	li a:hover{
-		background-color: #803300;
+		background-color: #6293a7;
 	}
 	li a:link{
 	    color:white;
 	}
 	li a:visited{
-		color:white;
+		color: #ffffff;
 	}
 	li a:active {
-    color: darkred;
+    color: #6293a7;
 }
 	body {
 margin:auto;
@@ -76,7 +76,7 @@ width:100%;
     color: darkgreen;
     background-color: orange;
     text-align: center;
-	color=white;
+	color: white;
     cursor: pointer;
     white-space: pre-wrap;
 }
@@ -100,7 +100,7 @@ width:100%;
         padding:10px;
       }
   footer {
-        background-color:none;
+        /*background-color:none;*/
         padding: 20px;
         margin:auto;
         color:black;

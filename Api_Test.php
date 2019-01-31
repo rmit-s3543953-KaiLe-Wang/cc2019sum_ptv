@@ -25,6 +25,11 @@ foreach ($obj['stops'] as $stops)
     {
         $stopName .= $stops['stop_name'];
         $stopID .= $stops['stop_id'];
+//        echo"<pre>";
+//        echo $stopName;
+//        echo $stopID;
+//        echo PHP_EOL;
+//        echo "<pre>";
         break;
     }
 };
@@ -47,6 +52,12 @@ foreach ($obj1['departures'] as $departures) {
 $arrayTemp = array_flip($arrayTemp);
 $arrayTemp = array_keys($arrayTemp);
 
+//echo "route id:";
+//echo"<pre>";
+//print_r($arrayTemp);
+//echo "<pre>";
+//echo PHP_EOL;
+
 
 /*
 	get direction id and all put in an array with route id in pairs
@@ -64,57 +75,73 @@ foreach ($arrayTemp as $Temp) {
 
     foreach ($obj2['directions'] as $directions)
     {
-        array_push($arrayRnD, [
-            'Route_ID'=> $Temp, 'Direction_ID'=> $directions['direction_id'],
-        ]);
+        array_push($arrayRnD, ['Route_ID'=> $Temp, 'Direction_ID'=> $directions['direction_id'],'Direction_Name'=>$directions['direction_name']]);
     };
 }
+//echo "arrayRnd:";
+//echo"<pre>";
 //print_r($arrayRnD);
-echo"<pre>";
-print_r($arrayRnD);
-echo "<pre>";
-
+//echo "<pre>";
+//echo PHP_EOL;
 
 /*
 	get run ID of first 2 results of each pairs from departure
  */
 $arrayRunID = [];
 foreach ($arrayRnD as $RD) {
-    $DepartureUrl2 = "/v3/departures/route_type/0/stop/". $stopID ."/route/". $RD['Route_ID'] ."?direction_id=". $RD['Direction_ID'] ."&look_backwards=false&max_results=2&include_cancelled=false";
+    $DepartureUrl2 = "/v3/departures/route_type/0/stop/". $stopID ."/route/". $RD['Route_ID'] ."?direction_id=". $RD['Direction_ID'] ."&look_backwards=false&max_results=2&include_cancelled=false&expand=direction";
     $departure2 = generateURL($DepartureUrl2, $UserID, $key);
     //echo $departure2;
     //echo "<br/>";
     $content4 = file_get_contents($departure2);
     $obj4 = json_decode($content4, true);
     $departures = $obj4['departures'];
+    $direction = $obj4['directions'];
 
     foreach ($obj4['departures'] as $departures) {
-        array_push($arrayRunID, $departures['run_id']);
+        array_push($arrayRunID, [
+            'RouteID'=>$RD['Route_ID'],'DirectionID'=>$RD['Direction_ID'],'Direction_Name'=>$RD['Direction_Name'],
+            'PlateForm'=>$departures["platform_number"],'RunId'=>$departures['run_id'],
+            'EstTime'=>substr($departures["estimated_departure_utc"],11,5),
+        ]);
     }
 }
-echo "<pre>";
-print_r($arrayRunID);
-echo "<pre>";
+
+//echo "run ID:";
+//echo"<pre>";
+//print_r($arrayRunID);
+//echo "<pre>";
+//echo PHP_EOL;
 
 
 /*
 	Get Final stop names
  */
-$res = array();
+$res = [];
 //$platform = array();
 foreach ($arrayRunID as $Run) {
-    $PatternURL = "/v3/pattern/run/". $Run ."/route_type/0?expand=stop&stop_id=". $stopID;
+    $PatternURL = "/v3/pattern/run/". $Run['RunId'] ."/route_type/0?expand=stop&stop_id=". $stopID;
     $pattern = generateURL($PatternURL, $UserID, $key);
     $content3 = file_get_contents($pattern);
     $obj3 = json_decode($content3, true);
 
     $finalstop = $obj3['stops'];
     $stopArray = array();
+//    $routeName = $obj3['routes'];
     foreach ($obj3['stops'] as $finalstop) {
         $stopArray[] = $finalstop['stop_name'] ;
     }
-    $res[] = $stopArray;
+    array_push($res, [
+        'RouteID'=>$Run['RouteID'],'DirectionID'=>$Run['DirectionID'],
+        'Direction_Name'=>$Run['Direction_Name'],
+        'RunId'=>$Run['RunId'],'PlateForm'=>$Run['PlateForm'],
+        'EstTime'=>$Run['EstTime'],'stops'=>$stopArray,]);
 }
+
+//combine necessary array data
+
+echo "res array";
+
 echo"<pre>";
 print_r($res);
 echo "<pre>";
@@ -124,7 +151,6 @@ echo "<pre>";
 /*
 	Function to form an requirest URL
  */
-
 function generateURL($Url, $UserID, $key)
 {
     // append developer ID to API endpoint URL
