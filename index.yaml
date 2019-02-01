@@ -1,0 +1,6 @@
+indexes:
+- kind: Favorite
+  ancestor: yes
+  properties:
+  - name: user
+  - name: station

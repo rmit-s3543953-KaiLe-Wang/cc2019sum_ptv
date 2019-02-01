@@ -2,6 +2,7 @@
 /*
 library
 */
+require 'vendor/autoload.php';
 use google\appengine\api\users\User;
 use google\appengine\api\users\UserService;
 use Google\Cloud\Datastore\DatastoreClient;
@@ -20,11 +21,17 @@ if (isset($user)) {
 	echo sprintf('Welcome, %s! (<a href="%s">sign out</a>) <br>',
 		$user->getNickname(),
 		UserService::createLogoutUrl('/'));
+		//add_fav($datastore, $search_data,$user);
 		// favorite button
 		echo 'favorite button:';
-		echo "<form metnod ='POST'><input type = 'submit' name = '$search_data' value = '$search_data' />";
-		if (isset($_POST[$search_data])){
+		echo "<form action='favorite_function.php' metnod ='POST'>";
+		echo '<input type="hidden" name ="station"'. "value = '$search_data' />";
+		echo "<input type = 'submit' name = 'set as favorite'/></form>";
+		//print_r($_POST['station']);
+		if (isset($_POST["station"])){
+			echo "<br> value of post:".$_POST['station'];
 			add_fav($datastore, $search_data,$user);
+			echo '<br> operation started';
 		}
 }
 	else {
@@ -35,11 +42,11 @@ if (isset($user)) {
 /*
 upload data to data store
 */
-function add_fav(DatastoreClient $datastore, $search_data,$user)
+function add_fav(DatastoreClient $datastore, $search_data,User $user)
 {
 $key = $datastore->key('station');
-$task_favorite = $datastore ->entity($key,['user'=>$user,'station' =>$search_data]);
+$task_favorite = $datastore ->entity($key,['user'=>$user->getEmail(),'station' =>$search_data]);
 $datastore->insert($task_favorite);
-return $task_favorite;
+echo "task compelete";
 } 
 ?>
