@@ -22,17 +22,18 @@ if (isset($user)) {
 		$user->getNickname(),
 		UserService::createLogoutUrl('/'));
 		//add_fav($datastore, $search_data,$user);
-		// favorite button
-		echo 'favorite button:';
-		echo "<form action='favorite_function.php' metnod ='POST'>";
-		echo '<input type="hidden" name ="station"'. "value = '$search_data' />";
-		echo "<input type = 'submit' name = 'set as favorite'/></form>";
-		//print_r($_POST['station']);
 		if (isset($_POST["station"])){
 			echo "<br> value of post:".$_POST['station'];
 			add_fav($datastore, $search_data,$user);
 			echo '<br> operation started';
 		}
+		// favorite button
+		echo 'favorite button:';
+		echo "<form action='/' metnod ='POST'>";
+		echo '<input type="hidden" name ="station"'. "value = '$search_data' />";
+		echo "<input type = 'submit'/></form>";
+		//print_r($_POST['station']);
+		
 }
 	else {
 	echo sprintf('<a href="%s">Sign in or register</a>',
