@@ -1,5 +1,6 @@
 runtime: php55
 api_version: 1
+threadsafe: true
 
 handlers:
 
@@ -7,4 +8,4 @@ handlers:
   static_dir: css
 
 - url: /.*
-  script: index.php
+  script: favorite_function.php
