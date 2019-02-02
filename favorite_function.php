@@ -21,10 +21,7 @@ if (isset($user)) {
 	echo sprintf('Welcome, %s! (<a href="%s">sign out</a>) <br>',
 		$user->getNickname(),
 		UserService::createLogoutUrl('/'));
-		//add_fav($datastore, $search_data,$user);
 		if (isset($_GET["station"])){
-			//echo "<br> value of post:".$_GET['station'];
-			
 			add_fav($datastore, $search_data,$user);
 		}
 		// favorite button
@@ -32,7 +29,6 @@ if (isset($user)) {
 		echo "<form action='/' metnod ='GET'>";
 		echo '<input type="hidden" name ="station"'. "value = '$search_data' />";
 		echo "<input type = 'submit'/></form>";
-		//print_r($_POST['station']);
 		
 }
 	else {
@@ -49,19 +45,34 @@ function: upload data to data store
 */
 function add_fav(DatastoreClient $datastore, $search_data,User $user)
 {
-$key = $datastore->key('station');
-$task_favorite = $datastore ->entity($key,['user'=>$user->getEmail(),'station' =>$search_data]);
-$query = checkData($datastore,$search_data,$user);
-if($query==null){	
+//set keys
+$key = $datastore->key('favorite',$user->getEmail());
+$task_favorite = $datastore ->entity($key);
+//generate query result.
+$query = searchForStation($datastore,$search_data,$user,$key);
+$station=$query['station'];
+// make empty transaction.
+$transaction = $datastore->transaction();
+//if no station, insert one as favorite
+if($station == null){
+	$task_favorite['station']=$search_data;
 	$datastore->insert($task_favorite);
 	echo "insert task compelete";
 }
 else {
-	echo "it is testing part";
-	echo "<pre>";
-	foreach ($query as $entity){
-	echo $entity['station'];
-	echo "<pre>";
+	//if station has found in datastore
+	//1. if same station, delete the record
+	if($station == $search_data){
+	echo "same data found, will delete the record";
+	$transaction->delete($key);
+	$transaction->commit();
+	}
+	//2. else, update the old record.
+	else{
+		echo "record will be updated.";
+		$task_favorite['station']=$search_data;
+		$transaction->update($task_favorite,array('allowOverwrite'=>true));
+		$transaction->commit();
 	}
 }
 }
@@ -73,15 +84,9 @@ function: checkData
 @return: null = data not exsist.
 		 $result - the result of the query
 */
-function checkData(DatastoreClient $datastore, $search_data,User $user)
+function searchForStation(DatastoreClient $datastore, $search_data,User $user,$key)
 {
-	$query = $datastore->query()->kind('Favorite')->filter('user','=',$user->getEmail());
-	$result = $datastore->runQuery($query);
-	if(empty($result))
-	{
-		return null;
-	}
-	else
-		return $result;
+	$result = $datastore->lookup($key);
+	return $result;
 }
 ?>
