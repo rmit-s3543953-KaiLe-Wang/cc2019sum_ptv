@@ -8,7 +8,7 @@ include('head.inc');
       <div class="main_box">
 
 <?php
-include('Api_Test.php');
+include('Api_Request_code_New.php');
 
 	//if (no search bar variable has sent)
 	//then: display nothing.
@@ -47,8 +47,8 @@ for ($i=0;$i<sizeof($destination_list);$i++)
     $destination_name =$destination_list[$i];
     echo '<div class="platform_box">';
     echo '<div class="platform_number">'.$departure_platform[$i].'</div>';
-    echo '<h2 class="destination">'.$destination_name.'</h2>';
-    echo '<div style="display:block;margin:auto;padding:10px;font-size:30px;">'.$departure_time[$i].'</div>';
+    echo '<h2 class="destination">'.$destination_name.' Line</h2>';
+    echo '<div class="estTime">'.$departure_time[$i].'</div>';
     echo '<div class="stop_list">';
     foreach ($stop_list[$i] as $value)
     {

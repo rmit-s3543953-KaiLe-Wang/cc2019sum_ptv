@@ -1,15 +1,17 @@
 <?php
+date_default_timezone_set('Australia/Sydney');
+$input=$_GET["search"];
+$inSearch= preg_replace('/\s+/', '%20', $_GET["search"]);
 /*
 	developerID and Key for API
  */
 $UserID = '3001008';
 $key = 'e3251427-f68b-4535-a093-1d380e17e5dc';
 
-
 /*
 	get stop name & ID through search url
  */
-$SearchUrl = "/v3/search/Richmond?route_types=0&include_addresses=false&include_outlets=false&match_stop_by_suburb=true&match_route_by_suburb=false&match_stop_by_gtfs_stop_id=false";
+$SearchUrl = "/v3/search/$inSearch?route_types=0&include_addresses=false&include_outlets=false&match_stop_by_suburb=true&match_route_by_suburb=false&match_stop_by_gtfs_stop_id=false";
 
 $search = generateURL($SearchUrl, $UserID, $key);
 $content = file_get_contents($search);
@@ -21,15 +23,13 @@ $stopName = '';
 $stopID = '';
 foreach ($obj['stops'] as $stops)
 {
-    if(strcasecmp("Richmond station",$stops['stop_name'])==0)
+    if(strcasecmp("$input station",$stops['stop_name'])==0)
     {
     	$stopName .= $stops['stop_name'];
     	$stopID .= $stops['stop_id'];
     	break;
     }
 };
-
-
 
 /*
 	get route ID of first 10 results from departure
@@ -51,75 +51,10 @@ foreach ($obj1['departures'] as $departures) {
             //'Route_Name'=>$routes['route_name'],
             'Platform_Number'=>$departures["platform_number"],
             'Run_ID'=>$departures['run_id'],
+//            'EstTime'=>strtotime($departures["estimated_departure_utc"])
             'EstTime'=>substr($departures["estimated_departure_utc"],11,5),
         ]);
 }
-
-//echo "<pre>";
-//print_r($arrayTemp);
-//echo "<pre>";
-
-//$arrayTemp = array_flip($arrayTemp);
-//$arrayTemp = array_keys($arrayTemp);
-
-
-/*
-	get direction id and all put in an array with route id in pairs
- */
-/*
-$arrlength=count($arrayTemp);
-$arrayRnD = [];
-
-foreach ($arrayTemp as $Temp) {
-  	$DirectionUrl = "/v3/directions/route/$Temp";
-	$direction = generateURL($DirectionUrl, $UserID, $key);
-	$content2 = file_get_contents($direction);
-	$obj2 = json_decode($content2, true);
-	//print_r($obj2);
-	$directions = $obj2['directions'];
-
-	foreach ($obj2['directions'] as $directions)
-	{
-		array_push($arrayRnD, [
-        'Route_ID'=> $Temp,
-        'Direction_ID'=> $directions['direction_id'],
-    	]);
-	};
-} 
-echo "<pre>";
-print_r($arrayRnD);
-echo "<pre>";
-*/
-
-/*
-	get run ID of first 5 results from departure
- */
-/*
-$arrayRunID = [];
-foreach ($arrayRnD as $RD) {
-	$DepartureUrl2 = "/v3/departures/route_type/0/stop/". $stopID ."/route/". $RD['Route_ID'] ."?direction_id=". $RD['Direction_ID'] ."&look_backwards=false&max_results=2&include_cancelled=false";
-	$departure2 = generateURL($DepartureUrl2, $UserID, $key);
-	//echo $departure2;
-	//echo "<br/>";
-	$content4 = file_get_contents($departure2);
-	$obj4 = json_decode($content4, true);
-	$departures = $obj4['departures'];
-
-	foreach ($obj4['departures'] as $departures) {
-
-		array_push($arrayRunID, [
-        'Platform_Number'=> $departures['platform_number'],
-        'Run_ID'=> $departures['run_id'],
-    	]);
-
-		//array_push($arrayRunID, $departures['run_id']);
-	}
-}
-
-echo "<pre>";
-print_r($arrayRunID);
-echo "<pre>";
-*/
 
 /*
 	Get Final stop names
@@ -139,11 +74,12 @@ foreach ($arrayTemp as $Temp) {
 	$object = json_decode($content4, true);
 	$routes = $object['route'];
 
-
-	$stopArray = array();
+	$stopTemp = array();
 	foreach ($obj3['stops'] as $finalstop) {
-			$stopArray[] = $finalstop['stop_name'] ;
-		}
+			$stopTemp[] = $finalstop['stop_name'];
+	}
+	//limite stopArray only contain the stops after user search
+	$stopArray = array_slice($stopTemp,array_search($input,array_map('strtolower',$stopTemp)));
 
 	array_push($res, [
 		'Route_ID' => $Temp['Route_ID'], 
@@ -154,27 +90,33 @@ foreach ($arrayTemp as $Temp) {
         'Estimate_Time' => $Temp['EstTime'],
         'Stops'=> $stopArray,
     	]);
-	//$res[] = $stopArray;
 }
 
-/*
-foreach ($arrayTemp as $Temp){
-	$RouteURL = "/v3/routes/". $Temp['Route_ID'];
-	$route = generateURL($RouteURL, $UserID, $key);
-	$content4 = file_get_contents($route);
-	$object = json_decode($content4, true);
-	$routes = $object['route'];
-
-	array_push($arrayRouteName, [
-		'Route_ID'=>$routes['route_id'],
-		'Route_Name'=>$routes['route_name'],
-	]);
+//sort Array format
+//1st sort by plateform and get new array
+usort($res,"cmp_route_asc");
+function cmp_route_asc($a, $b){
+    if ($a['Route_ID'] == $b['Route_ID']){
+        return 0;
+    }
+    return ($a['Route_ID'] < $b['Route_ID'])? 1 : -1;
 }
-*/
-echo"<pre>";
-print_r($res);
-echo "<pre>";
 
+$finalRes = array_reverse($res);
+$destination_list = array_column($finalRes,'Route_Name');
+$stop_list = array_column($finalRes,'Stops');
+$departure_platform = array_column($finalRes,'Platform_Number');
+$departure_time = array_column($finalRes,'Estimate_Time');
+
+//echo"<pre>";
+//print_r($stopArray);
+//echo "longlist";
+//print_r($finalRes);
+//print_r($destination_list);
+//print_r($departure_platform);
+//print_r($departure_time);
+//print_r($stop_list);
+//echo "<pre>";
 
 /*
 	Function to form an requirest URL

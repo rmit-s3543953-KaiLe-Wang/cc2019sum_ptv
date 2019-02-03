@@ -201,11 +201,18 @@ h5{
 }
  h2{
 	  font-family:Baskerville Old Face;
-	  font-size:30px;
+	  font-size:20px;
 	  text-align:left;
 	  margin:auto;
 	  padding-left:30px;
 	}
+
+ .estTime {
+     display:block;
+     margin:auto;
+     padding:10px;
+     font-size:30px;
+ }
 
 a:link{
   color:black;
