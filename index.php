@@ -15,6 +15,7 @@ $projID= "cc-2019-lab4";
 </head>
 <nav>
  <div>
+     <div id="logo"><img src= "image/kanngaru.png" height="60px" width="60px">Train tracker</div>
   <ul><li><a href="index.php">HOME</a></li>
       <li><?php
 	  //get user
@@ -22,23 +23,27 @@ $projID= "cc-2019-lab4";
 	//use and build data store service
 	$projID= "cc-2019-lab4";
 	$datastore = new DatastoreClient(['projectId' => $projID]);
+
 	// hardcoded data:
 	//$search_data = "East Richmond Station";
 	//echo "search data: $search_data".'<br>';
 	//account login and log out
 	if (isset($user)) {
-	echo sprintf('Welcome, %s! (<img src= "image/SignIn.png" height="40px" width="40px"><a href="%s">sign out) </a>',
+	echo sprintf('Welcome, %s! (<img src= "image/SignIn.png" height="20px" width="20px"><a href="%s">sign out) </a>',
 		$user->getNickname(),
 		UserService::createLogoutUrl('/'));
 	echo '<li><a href="history.php">history</a></li>';
-	
+
 	}
 	else {
-		echo sprintf('<img src= "image/SignIn.png" height="40px" width="40px"><a href="%s">Sign in or register </a>',
+		echo sprintf('<img src= "image/SignIn.png" height="20px" width="20px"><a href="%s">Sign in or register </a>',
 		UserService::createLoginUrl('/'));
 	}
 	  ?>
-      </li></ul>
+      </li>
+<!--      <li><a href=""><img src= "image/SignIn.png" height="20px" width="20px">My account</a></li>-->
+<!--      <li><a href=""><img src= "image/star.png" height="20px" width="20px">Favourite</a></li>-->
+  </ul>
 </div>
 </nav>
 <body>
@@ -49,44 +54,12 @@ $projID= "cc-2019-lab4";
 <?php
 include('Api_Request_code_New.php');
 
-	//if (no search bar variable has sent)
-	//then: display nothing.
-	//else:
-	//the station list is for storing the destination message.
-
-//	$destination_list=array("station1","station2","station3");
-//	//departure time for each route.
-//	$departure_time = array ("16:32","5:02","7:32");
-//	//the details for each route.
-//	$stop_list[$destination_list[0]]=array("Flinder street","Southern cross","flagstaff","parliament","--------","--------","Clifton hill","------","collingwood","north richmond", "west richmond", "westgath","--------","--------","Clifton hill","------","collingwood","north richmond", "west richmond", "westgath");
-//	$stop_list[$destination_list[1]]=array("Flinder street","Southern cross","flagstaff","parliament");
-//	$stop_list[$destination_list[2]]=array("Flinder street","-------","flagstaff","parliament");
-//	//platform number.
-//	$departure_platform[$destination_list[0]]=1;
-//	$departure_platform[$destination_list[1]]=3;
-//	$departure_platform[$destination_list[2]]=7;
-	//display all the messages.
-//	for ($i=0;$i<sizeof($destination_list);$i++)
-//	{
-//       $destination_name =$destination_list[$i];
-//	   echo '<div class="platform_box">';
-//	   echo '<div class="platform_number">'.$departure_platform[$destination_list[$i]].'</div>';
-//       echo '<h2 class="destination">'.$destination_name.'</h2>';
-//       echo '<div style="display:block;margin:auto;padding:10px;font-size:30px;">'.$departure_time[$i].'</div>';
-//       echo '<div class="stop_list">';
-//       foreach ($stop_list[$destination_list[$i]] as $value)
-//       {
-//           echo "$value <br>";
-//       }
-//       echo '</div></div>';
-//	}
-
 /*
 favorite function implementation
 */
 if(!empty($stops['stop_name'])&&$stops['stop_name']!=null){
-	echo "Search result: ".$stops['stop_name'];
-if (isset($user)){
+//	echo "Search result: ".$stops['stop_name'];
+    if (isset($user)){
 // favorite button
 		$search_data=$stops['stop_name'];
 		//echo 'favorite button:';
@@ -98,21 +71,30 @@ if (isset($user)){
 			add_fav($datastore, $search_data,$user);
 			$_SESSION["search"]=$search_data;
 		}
-}
-for ($i=0;$i<sizeof($destination_list);$i++)
-{
-    $destination_name =$destination_list[$i];
-    echo '<div class="platform_box">';
-    echo '<div class="platform_number">'.$departure_platform[$i].'</div>';
-    echo '<h2 class="destination">'.$destination_name.' Line</h2>';
-    echo '<div class="estTime">'.$departure_time[$i].'</div>';
-    echo '<div class="stop_list">';
-    foreach ($stop_list[$i] as $value)
-    {
-        echo "$value <br>";
     }
-    echo '</div></div>';
-}
+
+    for ($j=0;$j<sizeof($route_list);$j++) {
+        if (array_key_exists($j,$route_Temp)){
+            $route_name = $route_list[$j];
+            echo '<div class="route_box"><h2>'. $route_name.' Line </h2><br>';
+            for ($i=$j;$i<sizeof($route_list);$i++){
+                if($route_Temp[$j] == $route_list[$i]){
+                    $direction_name = end($stop_list[$i]);
+                    echo '<div class="platform_box">';
+                    echo '<div class="platform_number">'.$departure_platform[$i].'</div>';
+                    echo '<div class="estTime">Scheduled: '.$departure_time[$i].'</div>';
+                    echo '<div class="destination"><h3>To '.$direction_name.'</h3></div>';
+                    echo '<div class="stop_list">';
+                    foreach ($stop_list[$i] as $value) {
+                        echo "$value <br>";
+                        $direction_name = $value;
+                    }
+                    echo '</div></div>';
+                }
+            }
+            echo '</div>';
+        }
+    }
 }
 /*
 function: upload data to data store

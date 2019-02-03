@@ -140,7 +140,7 @@ foreach ($arrayTemp as $Temp) {
 	array_push($res, [
 		'Route_ID' => $Temp['Route_ID'], 
 		'Route_Name'=> $routes['route_name'],
-        'Direction_ID' => $Temp['Direction_ID'], 
+        'Direction_ID' => $Temp['Direction_ID'],
         'Run_ID' => $Temp['Run_ID'], 
         'Platform_Number'=> $Temp['Platform_Number'],
         'Estimate_Time' => $Temp['EstTime'],
@@ -152,28 +152,24 @@ foreach ($arrayTemp as $Temp) {
 //1st sort by plateform and get new array
 usort($res,"cmp_route_asc");
 
-
-
-
 $finalRes = array_reverse($res);
-$destination_list = array_column($finalRes,'Route_Name');
+
+$route_list = array_column($finalRes,'Route_Name');
 $stop_list = array_column($finalRes,'Stops');
 $departure_platform = array_column($finalRes,'Platform_Number');
 $departure_time = array_column($finalRes,'Estimate_Time');
+$route_Temp = array_unique($route_list);
 
 //echo"<pre>";
 //print_r($stopArray);
 //echo "longlist";
 //print_r($finalRes);
-//print_r($destination_list);
+//print_r($route_list);
+//print_r($route_Temp);
 //print_r($departure_platform);
 //print_r($departure_time);
 //print_r($stop_list);
 //echo "<pre>";
-
-/*
-	Function to form an requirest URL
- */
 
 }
 function cmp_route_asc($a, $b){
@@ -182,6 +178,10 @@ function cmp_route_asc($a, $b){
     }
     return ($a['Route_ID'] < $b['Route_ID'])? 1 : -1;
 }
+
+/*
+	Function to form an requirest URL
+ */
 function generateURL($Url, $UserID, $key)
 {
 	// append developer ID to API endpoint URL

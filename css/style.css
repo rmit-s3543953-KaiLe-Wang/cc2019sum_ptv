@@ -5,7 +5,7 @@ html{
 }
 	.Head{
 		text-align:center;
-		margin: 40px;
+		margin-top: 200px;
 		padding: 0px;
 		font-family:Script MT ;
 		font-size:40px;
@@ -19,23 +19,33 @@ html{
         padding:10px;
         width:auto;
 	}
+    #logo{
+        position:fixed;
+        width:100%;
+        list-style-type: none;
+        text-align:left;
+        padding-left: 20px;
+        overflow: hidden;
+        font-size: 30px;
+        color: white;
+    }
 	nav{
-	  margin-bottom:10px;
+        position:fixed;
+        width:100%;
 	}
 	nav ul{
         list-style-type: none;
         margin: auto;
         overflow: hidden;
-        background-color: #c1baa9;
+        background-color: #d3cece99;
       }
       
       
     nav ul li{
 		display: table-cell;
-    float:right;
+        float:right;
 		padding-bottom: 0;
-		padding-right:5%;
-		margin-left:60px;
+        margin: auto;
       }
       
      nav ul li a{
@@ -45,9 +55,10 @@ html{
         padding: 25px;
         text-decoration: none;
         font-family:Arial Rounded MT ;
+
       } 
 	li a:hover{
-		background-color: #6293a7;
+		background-color: #9c9797;
 	}
 	li a:link{
 	    color:white;
@@ -59,8 +70,13 @@ html{
     color: #6293a7;
 }
 	body {
-margin:auto;
-width:100%;
+        margin:auto;
+        width:100%;
+        background-image:url('../image/Start.png');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size:100% 100%;
+
 }
 
 	.w3-black,.w3-hover-black:hover{color:#fff!important;background-color:#000!important}
@@ -98,7 +114,10 @@ width:100%;
 
 	 main{
         padding:10px;
-      }
+         margin-top: 200px;
+         text-align: center;
+
+     }
   footer {
         /*background-color:none;*/
         padding: 20px;
@@ -106,45 +125,51 @@ width:100%;
         color:black;
         font-size:small;
       }
-	.platform_box{
-		display:inline-table;
-		padding: 7px;
-		margin:10px;
-		height: 350px;
-		width: 250px;
-		background-color:white;
-	}
-	.platform_box .destination{
-		display:inline;
-		text-align: right;
-	}
-	.platform_box .platform_number{
-		display:inline;
-		padding:15px;
-		margin-right:20px;
-		border-style: solid;
-		text-align: left;
-	}
-	.platform_box .stop_list{
-		display:inline-block;
-		columns:100px 3;
-		padding:3px;
-		text-align: left;
-	}
-	.w3-red,.w3-hover-red:hover{
-	  color:#fff!important;
-	  background-color:#f44336!important}
-	  .w3-white,.w3-hover-white:hover{
-	    color:#000!important;
-	    background-color:#fff!important}
-  .main_box{
-    background-color:#ffe699;
-    margin-top:5px;
-    margin:auto;
+
+.route_box{
+    background-color:#99d8ff91;
+    margin:10px;
     box-shadow: 10px 10px 5px #888888;
     padding:10px;
-    width:90%;
-  }
+    overflow:auto;
+}
+
+.platform_box{
+    display: inline-block;
+    vertical-align: bottom;
+    margin:20px;
+    height: 380px;
+    width: 280px;
+    background-color: rgba(212, 246, 255, 0.8);
+}
+.platform_box .destination{
+    float: right;
+    padding-right: 10px;
+}
+.platform_box .platform_number{
+    display: inline;
+    float: left;
+    padding:15px 25px;
+    text-align: left;
+    font-size:40px;
+    background-color: rgba(255, 255, 255, 0.77);
+
+}
+.platform_box .stop_list{
+    display:inline-block;
+    margin-top: 10px;
+    columns:100px 3;
+    padding:3px;
+    text-align: left;
+
+}
+.w3-red,.w3-hover-red:hover{
+    color:#fff!important;
+    background-color:#f44336!important}
+.w3-white,.w3-hover-white:hover{
+    color:#000!important;
+    background-color:#fff!important}
+
   .form_box{
     background-color: #fff7e6;
     max-width:800px;
@@ -187,31 +212,35 @@ width:100%;
     float:right;
   }
 
-h3{
-  font-family:"Lucida Console";
-  text-align:center;
-  color:#882b2b;
-  margin-top: 5px;
-}
-h5{
-  font-family:"Lucida Console";
-  text-align:center;
-  color:#882b2b;
-  margin-top: 5px;
-}
- h2{
-	  font-family:Baskerville Old Face;
+/*h3{*/
+  /*font-family:"Lucida Console";*/
+  /*text-align:center;*/
+  /*color:#882b2b;*/
+  /*margin-top: 5px;*/
+/*}*/
+/*h5{*/
+  /*font-family:"Lucida Console";*/
+  /*text-align:center;*/
+  /*color:#882b2b;*/
+  /*margin-top: 5px;*/
+/*}*/
+
+ h3{
 	  font-size:20px;
-	  text-align:left;
-	  margin:auto;
-	  padding-left:30px;
+	  margin:0 auto;
 	}
+
+h2{
+    font-size:30px;
+    margin:10px auto;
+}
+
 
  .estTime {
      display:block;
      margin:auto;
      padding:10px;
-     font-size:30px;
+     float: right;
  }
 
 a:link{

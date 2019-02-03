@@ -24,14 +24,14 @@ $projID= "cc-2019-lab4";
 	//echo "search data: $search_data".'<br>';
 	//account login and log out
 	if (isset($user)) {
-	echo sprintf('Welcome, %s! (<img src= "image/SignIn.png" height="40px" width="40px"><a href="%s">sign out) </a>',
+	echo sprintf('Welcome, %s! (<img src= "image/SignIn.png" height="20px" width="20px"><a href="%s">sign out) </a>',
 		$user->getNickname(),
 		UserService::createLogoutUrl('/'));
 	echo '<li><a href="history.php">history</a></li>';
 	
 	}
 	else {
-		echo sprintf('<img src= "image/SignIn.png" height="40px" width="40px"><a href="%s">Sign in or register </a>',
+		echo sprintf('<img src= "image/SignIn.png" height="20px" width="20px"><a href="%s">Sign in or register </a>',
 		UserService::createLoginUrl('/'));
 	}
 	  ?>
