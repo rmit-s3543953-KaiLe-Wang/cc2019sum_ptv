@@ -1,12 +1,52 @@
 <?php
-include('nav.inc');
-include('head.inc');
+session_start();
+//library
+require 'vendor/autoload.php';
+use google\appengine\api\users\User;
+use google\appengine\api\users\UserService;
+use Google\Cloud\Datastore\DatastoreClient;
+$projID= "cc-2019-lab4";
 ?>
+<!doctype html>
+<html>
+<head>
+    <link type="text/css" rel="stylesheet" href="css/style.css"/>
+    <meta charset="utf-8">
+</head>
+<nav>
+ <div>
+  <ul>
+      <li><a href="index.php"><?php
+	  //get user
+	$user = UserService::getCurrentUser();
+	//use and build data store service
+	$projID= "cc-2019-lab4";
+	$datastore = new DatastoreClient(['projectId' => $projID]);
+	// hardcoded data:
+	//$search_data = "East Richmond Station";
+	//echo "search data: $search_data".'<br>';
+	//account login and log out
+	if (isset($user)) {
+	echo sprintf('Welcome, %s! (<img src= "image/SignIn.png" height="40px" width="40px"><a href="%s">sign out</a>) <br>',
+		$user->getNickname(),
+		UserService::createLogoutUrl('/'));
+	}
+	else {
+		echo sprintf('<img src= "image/SignIn.png" height="40px" width="40px"><a href="%s">Sign in or register</a>',
+		UserService::createLoginUrl('/'));
+	}
+
+	  ?>
+	  </a></li>
+      <li><a href="index.php">HOME</a></li>
+      </ul>
+</div>
+</nav>
 <body>
     <title>Train tracker</title>
+<?php include('head.inc'); ?>
     <main>
       <div class="main_box">
-
 <?php
 include('Api_Request_code_New.php');
 
@@ -42,6 +82,23 @@ include('Api_Request_code_New.php');
 //       echo '</div></div>';
 //	}
 
+/*
+favorite function implementation
+*/
+if(!empty($stops['stop_name']))
+	echo "Search result: ".$stops['stop_name'];
+if (isset($user)&&!empty($stops['stop_name'])){
+// favorite button
+		$search_data=$stops['stop_name'];
+		//echo 'favorite button:';
+		echo "<form action='/' metnod ='GET'>";
+		echo '<input type="hidden" name ="station"'. "value = '$search_data' />";
+		echo "<input type = 'submit' value ='add to favorite'/></form>";
+		if (isset($_GET["station"])){
+			$datastore = new DatastoreClient(['projectId' => $projID]);
+			add_fav($datastore, $search_data,$user);
+		}
+}
 for ($i=0;$i<sizeof($destination_list);$i++)
 {
     $destination_name =$destination_list[$i];
@@ -57,6 +114,46 @@ for ($i=0;$i<sizeof($destination_list);$i++)
     echo '</div></div>';
 }
 
+/*
+function: upload data to data store
+@param: DatastoreClient datastore - the datastore we have created.
+		$search_data - the input data comes from search bar.
+		User $user - the object of logged in user
+@return: nothing
+*/
+function add_fav(DatastoreClient $datastore, $search_data,User $user)
+{
+//set keys
+$key = $datastore->key('favorite',$user->getEmail());
+$task_favorite = $datastore ->entity($key);
+//generate query result.
+$query = $datastore->lookup($key);
+$station=$query['station'];
+// make empty transaction.
+$transaction = $datastore->transaction();
+//if no station, insert one as favorite
+if($station == null){
+	$task_favorite['station']=$search_data;
+	$datastore->insert($task_favorite);
+	echo "insert task compelete";
+}
+else {
+	//if station has found in datastore
+	//1. if same station, delete the record
+	if($station == $search_data){
+	echo "same data found, will delete the record";
+	$transaction->delete($key);
+	$transaction->commit();
+	}
+	//2. else, update the old record.
+	else{
+		echo "record will be updated.";
+		$task_favorite['station']=$search_data;
+		$transaction->update($task_favorite,array('allowOverwrite'=>true));
+		$transaction->commit();
+	}
+}
+}
 ?>
     </div>
     </main>

@@ -8,4 +8,4 @@ handlers:
   static_dir: css
 
 - url: /.*
-  script: history_function.php
+  script: index.php

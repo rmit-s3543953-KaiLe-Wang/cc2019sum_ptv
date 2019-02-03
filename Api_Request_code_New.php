@@ -1,7 +1,28 @@
 <?php
 date_default_timezone_set('Australia/Sydney');
-$input=$_GET["search"];
-$inSearch= preg_replace('/\s+/', '%20', $_GET["search"]);
+$input;
+$isFirstTime=True;
+// if there is input but GET is lost
+if(empty($_GET["search"])&& !empty($_SESSION["search"]))
+{
+	$input=$_SESSION["search"];
+	//echo "<br>1st, $input<br>";
+	$isFirstTime=False;
+}
+// if no input is here e.g. 1st time open
+else if (empty($_GET["search"])&& empty($_SESSION["search"]))
+{
+	//echo "<br>2nd<br>";
+	$isFirstTime=True;
+}
+else{
+	$input = $_GET["search"];
+	$_SESSION["search"]=$input;
+	$isFirstTime=False;
+	//echo '<br>3rd,'.$input.','.$_SESSION["search"].'<br>';
+}
+if ($isFirstTime==false){
+$inSearch= preg_replace('/\s+/', '%20', $input);
 /*
 	developerID and Key for API
  */
@@ -23,7 +44,7 @@ $stopName = '';
 $stopID = '';
 foreach ($obj['stops'] as $stops)
 {
-    if(strcasecmp("$input station",$stops['stop_name'])==0)
+    if(strcasecmp("$input station",$stops['stop_name'])==0||strcasecmp("$input",$stops['stop_name'])==0)
     {
     	$stopName .= $stops['stop_name'];
     	$stopID .= $stops['stop_id'];
@@ -95,12 +116,9 @@ foreach ($arrayTemp as $Temp) {
 //sort Array format
 //1st sort by plateform and get new array
 usort($res,"cmp_route_asc");
-function cmp_route_asc($a, $b){
-    if ($a['Route_ID'] == $b['Route_ID']){
-        return 0;
-    }
-    return ($a['Route_ID'] < $b['Route_ID'])? 1 : -1;
-}
+
+
+
 
 $finalRes = array_reverse($res);
 $destination_list = array_column($finalRes,'Route_Name');
@@ -122,6 +140,13 @@ $departure_time = array_column($finalRes,'Estimate_Time');
 	Function to form an requirest URL
  */
 
+}
+function cmp_route_asc($a, $b){
+    if ($a['Route_ID'] == $b['Route_ID']){
+        return 0;
+    }
+    return ($a['Route_ID'] < $b['Route_ID'])? 1 : -1;
+}
 function generateURL($Url, $UserID, $key)
 {
 	// append developer ID to API endpoint URL
