@@ -17,4 +17,4 @@ handlers:
   script: history.php
 
 - url: /image
-  static_dir: images
+  static_dir: image

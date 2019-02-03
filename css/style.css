@@ -21,7 +21,7 @@ html{
 	}
     #logo{
         position:fixed;
-        width:100%;
+        width:250px;
         list-style-type: none;
         text-align:left;
         padding-left: 20px;
@@ -211,6 +211,12 @@ html{
   div .submit{
     float:right;
   }
+
+#button{
+    background:url(image/star.png);
+    border:0;
+    cursor:pointer;
+}
 
 /*h3{*/
   /*font-family:"Lucida Console";*/

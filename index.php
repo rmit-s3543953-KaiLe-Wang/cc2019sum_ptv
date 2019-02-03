@@ -29,7 +29,8 @@ $projID= "cc-2019-lab4";
 	//echo "search data: $search_data".'<br>';
 	//account login and log out
 	if (isset($user)) {
-	echo sprintf('Welcome, %s! (<img src= "image/SignIn.png" height="20px" width="20px"><a href="%s">sign out) </a>',
+//	    echo sprintf('<a href="%s"><img src= "image/SignIn.png" height="20px" width="20px">sign out </a>',
+	    echo sprintf('Welcome, %s! (<img src= "image/SignIn.png" height="20px" width="20px"><a href="%s">sign out) </a>',
 		$user->getNickname(),
 		UserService::createLogoutUrl('/'));
 	echo '<li><a href="history.php">history</a></li>';
@@ -63,9 +64,10 @@ if(!empty($stops['stop_name'])&&$stops['stop_name']!=null){
 // favorite button
 		$search_data=$stops['stop_name'];
 		//echo 'favorite button:';
-		echo "<form action='index.php' metnod ='GET'>";
+		echo "<form action='index.php' method ='GET'>";
 		echo '<input type="hidden" name ="station"'. "value = '$search_data' />";
-		echo "<input type = 'submit' value ='add to favorite'/></form>";
+//		echo "<input type = 'submit' value ='add to favorite'/></form>";
+        echo "<input type = 'submit' name='button' id='button' value =''/></form>";
 		if (isset($_GET["station"])){
 			$datastore = new DatastoreClient(['projectId' => $projID]);
 			add_fav($datastore, $search_data,$user);
