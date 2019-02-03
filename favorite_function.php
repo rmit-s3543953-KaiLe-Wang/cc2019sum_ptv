@@ -26,7 +26,7 @@ if (isset($user)) {
 		}
 		// favorite button
 		echo 'favorite button:';
-		echo "<form action='/' metnod ='GET'>";
+		echo "<form action='index.php' metnod ='GET'>";
 		echo '<input type="hidden" name ="station"'. "value = '$search_data' />";
 		echo "<input type = 'submit'/></form>";
 		

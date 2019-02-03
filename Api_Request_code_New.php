@@ -9,14 +9,46 @@ if(empty($_GET["search"])&& !empty($_SESSION["search"]))
 	//echo "<br>1st, $input<br>";
 	$isFirstTime=False;
 }
-// if no input is here e.g. 1st time open
+// if no input is here e.g. 1st time open, then use favorite value, if none, then not display anything.
 else if (empty($_GET["search"])&& empty($_SESSION["search"]))
 {
 	//echo "<br>2nd<br>";
-	$isFirstTime=True;
+	$key = $datastore->key('favorite',$user->getEmail());
+	//generate query result.
+	$query = $datastore->lookup($key);
+	$station=$query['station'];
+	if ($station ==null)
+		$isFirstTime=True;
+	else
+	{
+		$isFirstTime=False;
+		$input = $station;
+	}
 }
 else{
 	$input = $_GET["search"];
+	//if get is not empty, means that there is a request, thus save it on history.
+	$key = $datastore->key('history',$user->getEmail());
+    $task = $datastore -> entity($key);
+    $query = $datastore->lookup($key);
+	$records=explode(",",$query['station']);
+	$numberOfRecords=count($records);
+	//if there is no recording, then insert one new entity.
+	$search_data=$input;
+      if ($numberOfRecords==0||($numberOfRecords==1&&$query==null))
+      {
+        $task['station']=$search_data;
+        $datastore->insert($task);
+      }
+      // else, update new record under previous entity.
+      else{
+        $transaction = $datastore->transaction();
+        //echo "<br>update function<br>";
+        $update_string=$query['station'].','.$search_data;
+        $task['station']=$update_string;
+        $transaction->update($task,array('allowOverwrite'=>true));
+        $transaction->commit();
+      }
 	$_SESSION["search"]=$input;
 	$isFirstTime=False;
 	//echo '<br>3rd,'.$input.','.$_SESSION["search"].'<br>';

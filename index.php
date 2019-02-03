@@ -15,8 +15,8 @@ $projID= "cc-2019-lab4";
 </head>
 <nav>
  <div>
-  <ul>
-      <li><a href="index.php"><?php
+  <ul><li><a href="index.php">HOME</a></li>
+      <li><?php
 	  //get user
 	$user = UserService::getCurrentUser();
 	//use and build data store service
@@ -27,18 +27,17 @@ $projID= "cc-2019-lab4";
 	//echo "search data: $search_data".'<br>';
 	//account login and log out
 	if (isset($user)) {
-	echo sprintf('Welcome, %s! (<img src= "image/SignIn.png" height="40px" width="40px"><a href="%s">sign out</a>) <br>',
+	echo sprintf('Welcome, %s! (<img src= "image/SignIn.png" height="40px" width="40px"><a href="%s">sign out) <br>',
 		$user->getNickname(),
-		UserService::createLogoutUrl('/'));
+		UserService::createLogoutUrl('/index.php'));
+	echo '<li><a href="history.php">history</a></li>';
+	
 	}
 	else {
-		echo sprintf('<img src= "image/SignIn.png" height="40px" width="40px"><a href="%s">Sign in or register</a>',
-		UserService::createLoginUrl('/'));
+		echo sprintf('<img src= "image/SignIn.png" height="40px" width="40px"><a href="%s">Sign in or register',
+		UserService::createLoginUrl('/index.php'));
 	}
-
 	  ?>
-	  </a></li>
-      <li><a href="index.php">HOME</a></li>
       </ul>
 </div>
 </nav>
@@ -91,7 +90,7 @@ if (isset($user)&&!empty($stops['stop_name'])){
 // favorite button
 		$search_data=$stops['stop_name'];
 		//echo 'favorite button:';
-		echo "<form action='/' metnod ='GET'>";
+		echo "<form action='index.php' metnod ='GET'>";
 		echo '<input type="hidden" name ="station"'. "value = '$search_data' />";
 		echo "<input type = 'submit' value ='add to favorite'/></form>";
 		if (isset($_GET["station"])){

@@ -24,7 +24,7 @@ echo "search data: $search_data".'<br>';
   		UserService::createLogoutUrl('/'));
       $key = $datastore->key('history',$user->getEmail());
       $task = $datastore -> entity($key);
-      $query = searchForStation($datastore,$key);
+      $query = $datastore->lookup($key);
       //suggest: put $query['station'] in SESSION array, then explode() it.
       $records=explode(",",$query['station']);
       echo "history:";
