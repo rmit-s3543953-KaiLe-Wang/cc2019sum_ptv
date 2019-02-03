@@ -7,6 +7,7 @@ if(empty($_GET["search"])&& !empty($_SESSION["search"]))
 {
 	$input=$_SESSION["search"];
 	//echo "<br>1st, $input<br>";
+	$_SESSION["search"]=array();
 	$isFirstTime=False;
 }
 // if no input is here e.g. 1st time open, then use favorite value, if none, then not display anything.

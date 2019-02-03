@@ -84,9 +84,9 @@ include('Api_Request_code_New.php');
 /*
 favorite function implementation
 */
-if(!empty($stops['stop_name']))
+if(!empty($stops['stop_name'])&&$stops['stop_name']!=null){
 	echo "Search result: ".$stops['stop_name'];
-if (isset($user)&&!empty($stops['stop_name'])){
+if (isset($user)){
 // favorite button
 		$search_data=$stops['stop_name'];
 		//echo 'favorite button:';
@@ -96,6 +96,7 @@ if (isset($user)&&!empty($stops['stop_name'])){
 		if (isset($_GET["station"])){
 			$datastore = new DatastoreClient(['projectId' => $projID]);
 			add_fav($datastore, $search_data,$user);
+			$_SESSION["search"]=$search_data;
 		}
 }
 for ($i=0;$i<sizeof($destination_list);$i++)
@@ -112,7 +113,7 @@ for ($i=0;$i<sizeof($destination_list);$i++)
     }
     echo '</div></div>';
 }
-
+}
 /*
 function: upload data to data store
 @param: DatastoreClient datastore - the datastore we have created.
