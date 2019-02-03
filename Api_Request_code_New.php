@@ -108,7 +108,7 @@ foreach ($obj1['departures'] as $departures) {
             'Platform_Number'=>$departures["platform_number"],
             'Run_ID'=>$departures['run_id'],
 //            'EstTime'=>strtotime($departures["estimated_departure_utc"])
-            'EstTime'=>substr($departures["estimated_departure_utc"],11,5),
+            'EstTime'=>substr($departures["scheduled_departure_utc"],strpos("T",$departures["scheduled_departure_utc"]),8),
         ]);
 }
 
