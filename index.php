@@ -30,14 +30,13 @@ $projID= "cc-2019-lab4";
 	//account login and log out
 	if (isset($user)) {
 //	    echo sprintf('<a href="%s"><img src= "image/SignIn.png" height="20px" width="20px">sign out </a>',
-	    echo sprintf('Welcome, %s! (<img src= "image/SignIn.png" height="20px" width="20px"><a href="%s">sign out) </a>',
-		$user->getNickname(),
-		UserService::createLogoutUrl('/'));
+	    echo sprintf('<a href="%s"><img src= "image/SignIn.png" height="20px" width="20px">%s(sign out)</a>',
+		UserService::createLogoutUrl('/'),$user->getNickname());
 	echo '<li><a href="history.php">history</a></li>';
 
 	}
 	else {
-		echo sprintf('<img src= "image/SignIn.png" height="20px" width="20px"><a href="%s">Sign in or register </a>',
+		echo sprintf('<a href="%s"><img src= "image/SignIn.png" height="20px" width="20px">Sign in or register </a>',
 		UserService::createLoginUrl('/'));
 	}
 	  ?>
@@ -70,8 +69,9 @@ if(!empty($stops['stop_name'])&&$stops['stop_name']!=null){
         echo "<input type = 'submit' name='button' id='button' value =''/></form>";
 		if (isset($_GET["station"])){
 			$datastore = new DatastoreClient(['projectId' => $projID]);
-			add_fav($datastore, $search_data,$user);
-			$_SESSION["search"]=$search_data;
+			$flag=add_fav($datastore, $search_data,$user);
+			if ($flag==0)
+				$_SESSION["search"]=$search_data;
 		}
     }
 
@@ -120,6 +120,7 @@ if($station == null){
 	$task_favorite['station']=$search_data;
 	$datastore->insert($task_favorite);
 	echo "insert task compelete";
+	return 0;
 }
 else {
 	//if station has found in datastore
@@ -128,6 +129,7 @@ else {
 	echo "same data found, will delete the record";
 	$transaction->delete($key);
 	$transaction->commit();
+	return 1;
 	}
 	//2. else, update the old record.
 	else{
@@ -135,6 +137,7 @@ else {
 		$task_favorite['station']=$search_data;
 		$transaction->update($task_favorite,array('allowOverwrite'=>true));
 		$transaction->commit();
+		return 0;
 	}
 }
 }

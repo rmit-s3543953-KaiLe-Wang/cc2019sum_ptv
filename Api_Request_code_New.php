@@ -101,6 +101,12 @@ $arrayTemp = [];
 $arrayRouteName = [];
 foreach ($obj1['departures'] as $departures) {
 		//array_push($arrayTemp, $departures['route_id']);
+		//echo "<br>";
+		//	echo $departures["scheduled_departure_utc"];
+		//	echo "<br>";
+		$estimate_time = new DateTime($departures["estimated_departure_utc"]);
+		$timeZone = new DateTimeZone('Australia/Sydney');
+		$estimate_time->setTimezone($timeZone);
 	array_push($arrayTemp, [
             'Route_ID'=>$departures['route_id'],
             'Direction_ID'=>$departures['direction_id'],
@@ -108,7 +114,9 @@ foreach ($obj1['departures'] as $departures) {
             'Platform_Number'=>$departures["platform_number"],
             'Run_ID'=>$departures['run_id'],
 //            'EstTime'=>strtotime($departures["estimated_departure_utc"])
-            'EstTime'=>substr($departures["scheduled_departure_utc"],strpos("T",$departures["scheduled_departure_utc"]),8),
+			
+            'EstTime'=>$estimate_time->format('H:i:s')
+			//substr($departures["estimated_departure_utc"],strpos("T",$departures["estimated_departure_utc"]),18),
         ]);
 }
 
@@ -135,7 +143,7 @@ foreach ($arrayTemp as $Temp) {
 			$stopTemp[] = $finalstop['stop_name'];
 	}
 	//limite stopArray only contain the stops after user search
-	$stopArray = array_slice($stopTemp,array_search(strtolower($input),array_map('strtolower',$stopTemp)));
+	$stopArray = array_slice($stopTemp,array_search(strtolower($input),array_map('strtolower',$stopTemp))==false? array_search(strtolower(str_replace("Station","",$input)),array_map('strtolower',$stopTemp)):array_search(strtolower($input),array_map('strtolower',$stopTemp)));
 
 	array_push($res, [
 		'Route_ID' => $Temp['Route_ID'], 

@@ -213,8 +213,9 @@ html{
   }
 
 #button{
-    background:url(image/star.png);
-    border:0;
+    background-image:url('../image/star.png');
+	height: 30px;
+	width : 30px;
     cursor:pointer;
 }
 
