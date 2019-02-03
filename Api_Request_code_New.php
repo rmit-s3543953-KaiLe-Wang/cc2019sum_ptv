@@ -29,6 +29,7 @@ else if (empty($_GET["search"])&& empty($_SESSION["search"]))
 else{
 	$input = $_GET["search"];
 	//if get is not empty, means that there is a request, thus save it on history.
+	if (isset($user)){
 	$key = $datastore->key('history',$user->getEmail());
     $task = $datastore -> entity($key);
     $query = $datastore->lookup($key);
@@ -51,6 +52,7 @@ else{
         $transaction->commit();
       }
 	$_SESSION["search"]=$input;
+	}
 	$isFirstTime=False;
 	//echo '<br>3rd,'.$input.','.$_SESSION["search"].'<br>';
 }
