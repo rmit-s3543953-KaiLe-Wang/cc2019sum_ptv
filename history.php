@@ -50,7 +50,7 @@ $projID= "cc-2019-lab4";
       $query = $datastore->lookup($key);
       //suggest: put $query['station'] in SESSION array, then explode() it.
       $records=explode(",",$query['station']);
-      echo "history:";
+      echo "<h1>history:</h1>";
       foreach ($records as $value)
       {
 		  $i++;

@@ -58,19 +58,19 @@ include('Api_Request_code_New.php');
 favorite function implementation
 */
 if(!empty($stops['stop_name'])&&$stops['stop_name']!=null){
-//	echo "Search result: ".$stops['stop_name'];
+echo "<h1 style= 'display: inline-block; margin:auto;'>".$stops['stop_name'].'</h1>';
     if (isset($user)){
 // favorite button
 		$search_data=$stops['stop_name'];
 		//echo 'favorite button:';
-		echo "<form action='index.php' method ='GET'>";
+		echo "<form action='index.php' method ='GET' style= 'display: inline-block; margin:auto;'>";
 		echo '<input type="hidden" name ="station"'. "value = '$search_data' />";
 //		echo "<input type = 'submit' value ='add to favorite'/></form>";
-        echo "<input type = 'submit' name='button' id='button' value =''/></form>";
+        echo "<button type = 'submit' value=''><img src='image/star.png' width='20px' height='20px' alt='submit' /></button></form>";
 		if (isset($_GET["station"])){
 			$datastore = new DatastoreClient(['projectId' => $projID]);
 			$flag=add_fav($datastore, $search_data,$user);
-			if ($flag==0)
+			//if ($flag==0)
 				$_SESSION["search"]=$search_data;
 		}
     }
@@ -119,21 +119,21 @@ $transaction = $datastore->transaction();
 if($station == null){
 	$task_favorite['station']=$search_data;
 	$datastore->insert($task_favorite);
-	echo "insert task compelete";
+	echo "<br>favorite added<br>";
 	return 0;
 }
 else {
 	//if station has found in datastore
 	//1. if same station, delete the record
 	if($station == $search_data){
-	echo "same data found, will delete the record";
+	echo "<br>favorite deleted<br>";
 	$transaction->delete($key);
 	$transaction->commit();
 	return 1;
 	}
 	//2. else, update the old record.
 	else{
-		echo "record will be updated.";
+		echo "<br>favorite updated<br>";
 		$task_favorite['station']=$search_data;
 		$transaction->update($task_favorite,array('allowOverwrite'=>true));
 		$transaction->commit();

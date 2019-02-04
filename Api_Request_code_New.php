@@ -143,7 +143,10 @@ foreach ($arrayTemp as $Temp) {
 			$stopTemp[] = $finalstop['stop_name'];
 	}
 	//limite stopArray only contain the stops after user search
-	$stopArray = array_slice($stopTemp,array_search(strtolower($input),array_map('strtolower',$stopTemp))==false? array_search(strtolower(str_replace("Station","",$input)),array_map('strtolower',$stopTemp)):array_search(strtolower($input),array_map('strtolower',$stopTemp)));
+	//echo "input: $input";
+	$input=trim(strtolower(str_replace("Station","",$input)));
+	//echo "<br>new input: $input<br>";
+	$stopArray = array_slice($stopTemp,array_search(strtolower($input),array_map('strtolower',$stopTemp)));
 
 	array_push($res, [
 		'Route_ID' => $Temp['Route_ID'], 
